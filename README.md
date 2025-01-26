@@ -38,7 +38,9 @@ The app follows a modular architecture with the following components:
    flutter pub get
    ```
 3. Run the app:
+   ```sh
    flutter run --dart-define=OPEN_WEATHER_API_KEY=your_api_key
+   ```
 
 ### Project Structure
 ```
