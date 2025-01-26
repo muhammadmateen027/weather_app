@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/cubits/cubits.dart';
-import 'package:weather_app/models/models.dart';
+import 'package:weather_app/utils/utils.dart';
 
 import '../../pages.dart';
 import '../components/components.dart';
@@ -35,7 +35,6 @@ class WeatherPage extends StatelessWidget {
               DataState.success => WeatherPopulated(
                   weather: state.selectedWeather!,
                   location: state.location!,
-                  units: state.temperatureUnit,
                   forecasts: state.forecast,
                   onRefresh: () {
                     return context.read<WeatherCubit>().refreshWeather();
@@ -50,7 +49,7 @@ class WeatherPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.search, semanticLabel: 'Search'),
-        onPressed: () async {
+        onPressed: () {
           Navigator.of(context).push(SearchPage.route());
         },
       ),

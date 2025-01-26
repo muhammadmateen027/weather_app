@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app/models/display_weather.dart';
+import 'package:weather_app/utils/utils.dart';
 import 'package:weather_repository/weather_repository.dart';
+
+part 'weather_background.dart';
+part 'weather_forecast.dart';
 
 class WeatherPopulated extends StatelessWidget {
   const WeatherPopulated({
     required this.weather,
     required this.location,
-    required this.units,
     required this.onRefresh,
     required this.forecasts,
     required this.onCardTapped,
@@ -15,7 +18,6 @@ class WeatherPopulated extends StatelessWidget {
 
   final DisplayWeather weather;
   final Location location;
-  final TemperatureUnit units;
   final ValueGetter<Future<void>> onRefresh;
   final List<DisplayWeather> forecasts;
   final ValueSetter<DisplayWeather> onCardTapped;
@@ -27,49 +29,19 @@ class WeatherPopulated extends StatelessWidget {
         _WeatherBackground(),
         RefreshIndicator(
           onRefresh: onRefresh,
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.only(top: 100),
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              clipBehavior: Clip.none,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  _WeatherCondition(condition: weather.weatherCondition),
-                  _WeatherStatusAndLocation(
-                    location: location,
-                    temperature: weather.formattedTemperature,
-                  ),
-                  WeatherMetrics(
-                    humidity: weather.humidity,
-                    pressure: weather.pressure,
-                    windSpeed: weather.windSpeed,
-                  ),
-                  Text(
-                    '''Last Updated at ${TimeOfDay.fromDateTime(weather.date).format(context)}''',
-                  ),
-                  const SizedBox(height: 46),
-                  Container(
-                    height: 170, // Adjust this value based on your card size
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: forecasts.length,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        final forecast = forecasts[index];
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: WeatherCard(
-                            weather: forecast,
-                            onTap: () => onCardTapped(forecast),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            clipBehavior: Clip.none,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _WeatherDetail(weather: weather, location: location),
+                const SizedBox(height: 46),
+                _WeatherForecast(
+                  forecasts: forecasts,
+                  onCardTapped: onCardTapped,
+                ),
+              ],
             ),
           ),
         ),
@@ -78,94 +50,34 @@ class WeatherPopulated extends StatelessWidget {
   }
 }
 
-class WeatherCard extends StatelessWidget {
-  const WeatherCard({
-    super.key,
+class _WeatherDetail extends StatelessWidget {
+  const _WeatherDetail({
     required this.weather,
-    this.onTap,
+    required this.location,
   });
 
   final DisplayWeather weather;
-  final VoidCallback? onTap;
+  final Location location;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Card(
-        elevation: 4,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Text(
-              //   weather.date.shortDayName,
-              //   style: Theme.of(context).textTheme.bodyLarge,
-              // ),
-              // Text(
-              //   weather.date.formattedTime,
-              //   style: Theme.of(context).textTheme.bodySmall,
-              // ),
-              RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  style: DefaultTextStyle.of(context).style,
-                  children: [
-                    TextSpan(
-                      text: weather.date.shortDayName,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextSpan(
-                      text: '\n(${weather.date.formattedTime})',
-                      style: TextStyle(
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Text(
-                weather.weatherCondition.toEmoji,
-                style: const TextStyle(fontSize: 32),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                weather.formattedTemperature,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 8),
-            ],
-          ),
+    return Column(
+      children: [
+        const SizedBox(height: 120),
+        _WeatherCondition(condition: weather.condition),
+        _WeatherStatusAndLocation(
+          location: location,
+          temperature: weather.formattedTemperature,
         ),
-      ),
-    );
-  }
-}
-
-class _WeatherBackground extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final color = Theme.of(context).colorScheme.primaryContainer;
-    return SizedBox.expand(
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            stops: const [0.25, 0.75, 0.90, 1.0],
-            colors: [
-              color,
-              color.brighten(),
-              color.brighten(33),
-              color.brighten(50),
-            ],
-          ),
+        WeatherMetrics(
+          humidity: weather.humidity,
+          pressure: weather.pressure,
+          windSpeed: weather.windSpeed,
         ),
-      ),
+        Text(
+          '''Last Updated at ${TimeOfDay.fromDateTime(weather.date).format(context)}''',
+        ),
+      ],
     );
   }
 }
@@ -214,11 +126,22 @@ class _WeatherStatusAndLocation extends StatelessWidget {
       alignment: Alignment.center,
       child: Column(
         children: [
-          Text(
-            location.name,
-            style: theme.textTheme.displayMedium?.copyWith(
-              fontWeight: FontWeight.w200,
-            ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                location.name,
+                style: theme.textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.w200,
+                ),
+              ),
+              Text(
+                '(${location.country})',
+                style: theme.textTheme.labelSmall?.copyWith(),
+              ),
+            ],
           ),
           Text(
             temperature,
@@ -298,26 +221,6 @@ class _MetricItem extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-extension _ColorX on Color {
-  Color brighten([int percent = 10]) {
-    assert(
-      1 <= percent && percent <= 100,
-      'percentage must be between 1 and 100',
-    );
-    final p = percent / 100;
-    final alpha = a.round();
-    final red = r.round();
-    final green = g.round();
-    final blue = b.round();
-    return Color.fromARGB(
-      alpha,
-      red + ((255 - red) * p).round(),
-      green + ((255 - green) * p).round(),
-      blue + ((255 - blue) * p).round(),
     );
   }
 }

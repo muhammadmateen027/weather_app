@@ -27,8 +27,7 @@ class WeatherAppView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final seedColor = context.select(
-      (WeatherCubit cubit) =>
-          cubit.state.selectedWeather?.weatherCondition.color,
+      (WeatherCubit cubit) => cubit.state.selectedWeather?.condition.color,
     );
     return MaterialApp(
       theme: ThemeData(
