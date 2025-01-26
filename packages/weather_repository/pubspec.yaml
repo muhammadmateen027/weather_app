@@ -1,0 +1,14 @@
+name: weather_repository
+description: "Repository which manages the weather domain."
+version: 0.0.1
+homepage:
+
+environment:
+  sdk: ^3.6.0
+
+dependencies:
+  open_weather_api:
+    path: ../open_weather_api
+
+dev_dependencies:
+  flutter_lints: ^5.0.0
