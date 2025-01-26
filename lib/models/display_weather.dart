@@ -59,28 +59,42 @@ class DisplayWeather extends Equatable {
   final WeatherCondition weatherCondition;
   final TemperatureUnit unit;
 
-  factory DisplayWeather.fromRepository(
-    WeatherData weather,
-    TemperatureUnit unit,
-  ) {
+  factory DisplayWeather.fromRepository(WeatherData weather) {
     return DisplayWeather(
       condition: weather.condition,
       description: weather.description,
       iconCode: weather.iconCode,
-      temperature: unit == TemperatureUnit.celsius
-          ? weather.temperature
-          : (weather.temperature * 9 / 5) + 32,
+      temperature: weather.temperature,
       pressure: weather.pressure,
       humidity: weather.humidity,
       windSpeed: weather.windSpeed,
       date: weather.date,
-      unit: unit,
+      unit: TemperatureUnit.celsius,
       weatherCondition: WeatherCondition.fromString(weather.condition),
     );
   }
 
+  DisplayWeather copyWith({TemperatureUnit? unit}) {
+    return DisplayWeather(
+      condition: condition,
+      description: description,
+      iconCode: iconCode,
+      temperature: temperature,
+      pressure: pressure,
+      humidity: humidity,
+      windSpeed: windSpeed,
+      date: date,
+      unit: unit ?? this.unit,
+      weatherCondition: weatherCondition,
+    );
+  }
+
+  double get _displayTemperature => unit == TemperatureUnit.celsius
+      ? temperature
+      : (temperature * 9 / 5) + 32;
+
   String get formattedTemperature =>
-      '${temperature.toStringAsFixed(1)}°${unit == TemperatureUnit.celsius ? 'C' : 'F'}';
+      '$_displayTemperature°${unit == TemperatureUnit.celsius ? 'C' : 'F'}';
 
   @override
   List<Object> get props => [

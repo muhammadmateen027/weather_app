@@ -19,10 +19,9 @@ class WeatherPage extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
-            onPressed: () {},
-            // onPressed: () => Navigator.of(context).push<void>(
-            //   // SettingsPage.route(),
-            // ),
+            onPressed: () => Navigator.of(context).push<void>(
+              SettingsPage.route(),
+            ),
           ),
         ],
       ),
@@ -36,7 +35,7 @@ class WeatherPage extends StatelessWidget {
               DataState.success => WeatherPopulated(
                   weather: state.selectedWeather!,
                   location: state.location!,
-                  units: state.temperatureUnits,
+                  units: state.temperatureUnit,
                   onRefresh: () {
                     return context.read<WeatherCubit>().refreshWeather();
                   },

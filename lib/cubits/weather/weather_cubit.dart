@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:weather_repository/weather_repository.dart';
@@ -22,15 +20,11 @@ class WeatherCubit extends Cubit<WeatherState> {
 
     try {
       final weathers = await _weatherRepository.getWeatherByCity(city);
-      log('WeatherForecast: $weathers');
       emit(
         state.copyWith(
           dataState: DataState.success,
           location: weathers.location,
-          selectedWeather: DisplayWeather.fromRepository(
-            weathers.list.first,
-            state.temperatureUnits,
-          ),
+          selectedWeather: DisplayWeather.fromRepository(weathers.list.first),
         ),
       );
 
@@ -75,14 +69,24 @@ class WeatherCubit extends Cubit<WeatherState> {
         state.copyWith(
           dataState: DataState.success,
           location: weathers.location,
-          selectedWeather: DisplayWeather.fromRepository(
-            weathers.list.first,
-            state.temperatureUnits,
-          ),
+          selectedWeather: DisplayWeather.fromRepository(weathers.list.first),
         ),
       );
     } on Exception {
       emit(state.copyWith(dataState: DataState.failure));
     }
+  }
+
+  void toggleTemperatureUnit() {
+    final newUnit = state.temperatureUnit == TemperatureUnit.celsius
+        ? TemperatureUnit.fahrenheit
+        : TemperatureUnit.celsius;
+
+    emit(
+      state.copyWith(
+        temperatureUnit: newUnit,
+        selectedWeather: state.selectedWeather?.copyWith(unit: newUnit),
+      ),
+    );
   }
 }
