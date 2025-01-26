@@ -4,6 +4,11 @@ import 'package:open_weather_api/src/models/forecast_dto.dart';
 
 import 'config/api_config.dart';
 
+/// [OpenWeatherApiClient] for interacting with the OpenWeather API.
+///
+/// This client provides methods to search for locations and retrieve weather forecasts
+/// using the OpenWeather API. It uses the Dio package for making HTTP requests and
+/// handles various exceptions that may occur during the requests.
 class OpenWeatherApiClient {
   OpenWeatherApiClient(this.apiKey, {Dio? dio})
       : _dio = dio ?? Dio(BaseOptions(baseUrl: ApiConfig.baseUrl))
