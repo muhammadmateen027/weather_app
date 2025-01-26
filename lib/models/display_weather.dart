@@ -160,7 +160,7 @@ class DisplayWeather extends Equatable {
       : (temperature * 9 / 5) + 32;
 
   String get formattedTemperature =>
-      '$_displayTemperature°${unit == TemperatureUnit.celsius ? 'C' : 'F'}';
+      '${_displayTemperature.toStringAsFixed(3)}°${unit == TemperatureUnit.celsius ? 'C' : 'F'}';
 
   @override
   List<Object> get props => [
@@ -198,7 +198,14 @@ extension DateTimeString on DateTime {
     }
   }
 
-  String get shortDayName {
-    return fullDayName.substring(0, 3);
+  String get shortDayName => fullDayName.substring(0, 3);
+
+  String get formattedTime {
+    final hour = this.hour > 12 ? this.hour - 12 : this.hour;
+    final adjustedHour = hour == 0 ? 12 : hour;
+    final minute = this.minute.toString().padLeft(2, '0');
+    final period = this.hour >= 12 ? 'PM' : 'AM';
+
+    return '$adjustedHour:$minute $period';
   }
 }

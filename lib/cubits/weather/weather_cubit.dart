@@ -20,33 +20,56 @@ class WeatherCubit extends Cubit<WeatherState> {
 
     try {
       final weathers = await _weatherRepository.getWeatherByCity(city);
+      final selectedWeather =
+          DisplayWeather.fromRepository(weathers.list.first);
+
+      final List<DisplayWeather> forecast = weathers.list
+          .skip(1)
+          .map((weather) => DisplayWeather.fromRepository(weather))
+          .toList();
+
       emit(
         state.copyWith(
           dataState: DataState.success,
           location: weathers.location,
-          selectedWeather: DisplayWeather.fromRepository(weathers.list.first),
+          selectedWeather: selectedWeather,
+          forecast: forecast,
         ),
       );
-
-      // final weather = DisplayWeather.fromRepository(
-      //   await _weatherRepository.getWeatherByCity(city),
-      // );
-      //
-      // final units = state.temperatureUnits;
-      // final value = units.isFahrenheit
-      //     ? weather.temperature.value.toFahrenheit()
-      //     : weather.temperature.value;
-      //
-      // emit(
-      //   state.copyWith(
-      //     dataState: DataState.success,
-      //     temperatureUnits: units,
-      //     weather: weather.copyWith(temperature: Temperature(value: value)),
-      //   ),
-      // );
     } on Exception {
       emit(state.copyWith(dataState: DataState.failure));
     }
+  }
+
+  List<DisplayWeather> _reorderWeathers(DisplayWeather newSelection) {
+    final previousSelection = state.selectedWeather;
+    final List<DisplayWeather> orderedList = [...state.forecast];
+
+    // First, if there was a previous selection, insert it back in chronological order
+    if (previousSelection != null) {
+      int insertIndex = orderedList.indexWhere(
+          (weather) => weather.date.isAfter(previousSelection.date));
+      if (insertIndex == -1) {
+        orderedList.add(previousSelection);
+      } else {
+        orderedList.insert(insertIndex, previousSelection);
+      }
+    }
+
+    // Then remove the newly selected weather from the list
+    orderedList.removeWhere((weather) => weather == newSelection);
+
+    return orderedList;
+  }
+
+  void selectWeather(DisplayWeather newSelection) {
+    final forecastList = _reorderWeathers(newSelection);
+    emit(
+      state.copyWith(
+        selectedWeather: newSelection,
+        forecast: forecastList,
+      ),
+    );
   }
 
   Future<void> refreshWeather() async {
@@ -86,6 +109,9 @@ class WeatherCubit extends Cubit<WeatherState> {
       state.copyWith(
         temperatureUnit: newUnit,
         selectedWeather: state.selectedWeather?.copyWith(unit: newUnit),
+        forecast: state.forecast
+            .map((forecast) => forecast.copyWith(unit: newUnit))
+            .toList(),
       ),
     );
   }

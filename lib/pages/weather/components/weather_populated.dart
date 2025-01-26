@@ -8,6 +8,8 @@ class WeatherPopulated extends StatelessWidget {
     required this.location,
     required this.units,
     required this.onRefresh,
+    required this.forecasts,
+    required this.onCardTapped,
     super.key,
   });
 
@@ -15,6 +17,8 @@ class WeatherPopulated extends StatelessWidget {
   final Location location;
   final TemperatureUnit units;
   final ValueGetter<Future<void>> onRefresh;
+  final List<DisplayWeather> forecasts;
+  final ValueSetter<DisplayWeather> onCardTapped;
 
   @override
   Widget build(BuildContext context) {
@@ -45,12 +49,99 @@ class WeatherPopulated extends StatelessWidget {
                   Text(
                     '''Last Updated at ${TimeOfDay.fromDateTime(weather.date).format(context)}''',
                   ),
+                  const SizedBox(height: 46),
+                  Container(
+                    height: 170, // Adjust this value based on your card size
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: forecasts.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        final forecast = forecasts[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: WeatherCard(
+                            weather: forecast,
+                            onTap: () => onCardTapped(forecast),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
           ),
         ),
       ],
+    );
+  }
+}
+
+class WeatherCard extends StatelessWidget {
+  const WeatherCard({
+    super.key,
+    required this.weather,
+    this.onTap,
+  });
+
+  final DisplayWeather weather;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        elevation: 4,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Text(
+              //   weather.date.shortDayName,
+              //   style: Theme.of(context).textTheme.bodyLarge,
+              // ),
+              // Text(
+              //   weather.date.formattedTime,
+              //   style: Theme.of(context).textTheme.bodySmall,
+              // ),
+              RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  style: DefaultTextStyle.of(context).style,
+                  children: [
+                    TextSpan(
+                      text: weather.date.shortDayName,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '\n(${weather.date.formattedTime})',
+                      style: TextStyle(
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Text(
+                weather.weatherCondition.toEmoji,
+                style: const TextStyle(fontSize: 32),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                weather.formattedTemperature,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -162,17 +253,17 @@ class WeatherMetrics extends StatelessWidget {
         children: [
           _MetricItem(
             icon: Icons.water_drop,
-            value: '$humidity%',
+            value: '$humidity %',
             label: 'Humidity',
           ),
           _MetricItem(
             icon: Icons.speed,
-            value: '${pressure.round()}hPa',
+            value: '${pressure.round()} hPa',
             label: 'Pressure',
           ),
           _MetricItem(
             icon: Icons.air,
-            value: '${windSpeed.toStringAsFixed(1)}km/h',
+            value: '${windSpeed.toStringAsFixed(1)} km/h',
             label: 'Wind',
           ),
         ],
@@ -199,14 +290,11 @@ class _MetricItem extends StatelessWidget {
       children: [
         Icon(icon, size: 24),
         const SizedBox(height: 4),
-        Text(
-          value,
-          style: textTheme.bodyLarge,
-        ),
+        Text(value, style: textTheme.bodyLarge),
         Text(
           label,
           style: textTheme.bodyMedium?.copyWith(
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).colorScheme.onPrimaryFixed,
           ),
         ),
       ],

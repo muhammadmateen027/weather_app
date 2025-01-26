@@ -36,8 +36,12 @@ class WeatherPage extends StatelessWidget {
                   weather: state.selectedWeather!,
                   location: state.location!,
                   units: state.temperatureUnit,
+                  forecasts: state.forecast,
                   onRefresh: () {
                     return context.read<WeatherCubit>().refreshWeather();
+                  },
+                  onCardTapped: (weather) {
+                    context.read<WeatherCubit>().selectWeather(weather);
                   },
                 ),
             };
