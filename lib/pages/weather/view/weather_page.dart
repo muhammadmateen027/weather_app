@@ -11,19 +11,16 @@ class WeatherPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final selectedWeather = context.select(
+      (WeatherCubit cubit) => cubit.state.selectedWeather,
+    );
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: _AppbarTitle(),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () => Navigator.of(context).push<void>(
-              SettingsPage.route(),
-            ),
-          ),
-        ],
+        actions: selectedWeather == null ? [] : [_SettingIcon()],
       ),
       body: Center(
         child: BlocBuilder<WeatherCubit, WeatherState>(
@@ -52,6 +49,20 @@ class WeatherPage extends StatelessWidget {
         onPressed: () {
           Navigator.of(context).push(SearchPage.route());
         },
+      ),
+    );
+  }
+}
+
+class _SettingIcon extends StatelessWidget {
+  const _SettingIcon();
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.settings),
+      onPressed: () => Navigator.of(context).push<void>(
+        SettingsPage.route(),
       ),
     );
   }

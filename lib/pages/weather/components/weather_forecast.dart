@@ -42,7 +42,7 @@ class _WeatherCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Card(
-        elevation: 0.4,
+        elevation: 2,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
