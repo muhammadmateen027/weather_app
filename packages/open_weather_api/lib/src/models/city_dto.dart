@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'city_dto.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class CityDto {
   const CityDto({
     required this.name,
@@ -17,7 +17,7 @@ class CityDto {
   final String country;
 }
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class CoordDto {
   const CoordDto({required this.lat, required this.lon});
 

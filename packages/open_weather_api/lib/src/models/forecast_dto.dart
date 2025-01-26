@@ -4,7 +4,7 @@ import 'models.dart';
 
 part 'forecast_dto.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class ForecastDto {
   const ForecastDto({required this.list, required this.city});
 

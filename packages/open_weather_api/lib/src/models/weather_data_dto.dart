@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'weather_data_dto.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class WeatherDataDto {
   const WeatherDataDto({
     required this.main,
@@ -21,7 +21,7 @@ class WeatherDataDto {
   final String dtTxt;
 }
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class WeatherDto {
   const WeatherDto({
     required this.main,
@@ -36,7 +36,7 @@ class WeatherDto {
   final String icon;
 }
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class MainDataDto {
   const MainDataDto({
     required this.temp,
@@ -52,7 +52,7 @@ class MainDataDto {
   final int humidity;
 }
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class WindDto {
   const WindDto({required this.speed});
 
