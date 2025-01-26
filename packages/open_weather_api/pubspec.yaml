@@ -1,6 +1,7 @@
 name: open_weather_api
 description: "API Client for the OpenWeatherOrg API"
 version: 0.0.1
+publish_to: 'none'
 
 environment:
   sdk: ^3.6.0

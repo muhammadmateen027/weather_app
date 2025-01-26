@@ -1,20 +1,16 @@
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:weather_app/weather_bloc_observer.dart';
+import 'package:weather_repository/weather_repository.dart';
 
-void main() {
-  runApp(const MainApp());
-}
+import 'app/app.dart';
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Bloc.observer = const WeatherBlocObserver();
+  final apiKey = const String.fromEnvironment('OPEN_WEATHER_API_KEY');
 
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
-    );
-  }
+  // TODO: If key is not provided, show an error message
+
+  runApp(WeatherApp(weatherRepository: WeatherRepository(apiKey: apiKey)));
 }

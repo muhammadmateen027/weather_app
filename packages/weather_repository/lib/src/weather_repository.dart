@@ -7,43 +7,31 @@ class WeatherRepository {
 
   final api.OpenWeatherApiClient _weatherApiClient;
 
-  /// Returns a list of [Weather] objects for a given city.
-  ///
-  /// Throws a [LocationNotFoundException] if the city could not be found.
-  /// Throws a [WeatherNotFoundException] if the weather for the city could
-  /// not be found.
-  /// Throws a [WeatherRequestFailureException] if the request to the API fails.
-  ///
-  /// This method will throw a [LocationNotFoundException] if the
-  /// [city] argument is empty.
-
-  Future<List<Weather>> getWeatherByCity(String city) async {
+  Future<WeatherForecast> getWeatherByCity(String city) async {
     try {
-      final location = await _weatherApiClient.locationSearch(city);
-      final weatherList = await _weatherApiClient.getWeather(location);
-
-      return weatherList.map((weather) => weather.toDomain()).toList();
+      final coordinates = await _weatherApiClient.locationSearch(city);
+      return await _getWeatherForecast(coordinates);
     } on api.LocationNotFoundFailure {
       throw LocationNotFoundException();
+    }
+  }
+
+  Future<WeatherForecast> getWeatherByCoord(double lat, double lon) async {
+    return await _getWeatherForecast(api.CoordDto(lat: lat, lon: lon));
+  }
+
+  Future<WeatherForecast> _getWeatherForecast(api.CoordDto coordinates) async {
+    try {
+      final forecastDto = await _weatherApiClient.getWeather(coordinates);
+
+      return WeatherForecast(
+        location: Location.fromDto(forecastDto.city),
+        list: forecastDto.list.map((e) => WeatherData.fromDto(e)).toList(),
+      );
     } on api.WeatherNotFoundFailure {
       throw WeatherNotFoundException();
     } on api.WeatherRequestFailure {
       throw WeatherRequestFailureException();
     }
-  }
-}
-
-extension _WeatherX on api.WeatherDto {
-  Weather toDomain() {
-    return Weather(
-      condition: weather.first.main,
-      description: weather.first.description,
-      iconCode: weather.first.icon,
-      temperature: main.temp,
-      pressure: main.pressure,
-      humidity: main.humidity,
-      windSpeed: wind.speed,
-      date: date,
-    );
   }
 }

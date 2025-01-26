@@ -1,2 +1,2 @@
-export 'location_dto.dart';
-export 'weather_dto.dart';
+export 'city_dto.dart';
+export 'weather_data_dto.dart';

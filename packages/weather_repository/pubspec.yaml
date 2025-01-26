@@ -1,12 +1,13 @@
 name: weather_repository
 description: "Repository which manages the weather domain."
 version: 0.0.1
-homepage:
+publish_to: 'none'
 
 environment:
   sdk: ^3.6.0
 
 dependencies:
+  equatable: ^2.0.7
   open_weather_api:
     path: ../open_weather_api
 
