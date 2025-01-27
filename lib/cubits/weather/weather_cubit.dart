@@ -26,7 +26,6 @@ class WeatherCubit extends Cubit<WeatherState> {
       );
 
       final List<DisplayWeather> forecast = weathers.list
-          .skip(1)
           .map((weather) =>
               DisplayWeather.fromRepository(weather, state.temperatureUnit))
           .toList();
@@ -66,13 +65,7 @@ class WeatherCubit extends Cubit<WeatherState> {
   }
 
   void selectWeather(DisplayWeather newSelection) {
-    final forecastList = _reorderWeathers(newSelection);
-    emit(
-      state.copyWith(
-        selectedWeather: newSelection,
-        forecast: forecastList,
-      ),
-    );
+    emit(state.copyWith(selectedWeather: newSelection));
   }
 
   Future<void> refreshWeather() async {

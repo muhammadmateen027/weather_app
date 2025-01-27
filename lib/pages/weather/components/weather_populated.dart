@@ -40,6 +40,7 @@ class WeatherPopulated extends StatelessWidget {
                 _WeatherForecast(
                   forecasts: forecasts,
                   onCardTapped: onCardTapped,
+                  selectedWeather: weather,
                 ),
               ],
             ),
