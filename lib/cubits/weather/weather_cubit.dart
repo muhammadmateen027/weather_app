@@ -20,12 +20,15 @@ class WeatherCubit extends Cubit<WeatherState> {
 
     try {
       final weathers = await _weatherRepository.getWeatherByCity(city);
-      final selectedWeather =
-          DisplayWeather.fromRepository(weathers.list.first);
+      final selectedWeather = DisplayWeather.fromRepository(
+        weathers.list.first,
+        state.temperatureUnit,
+      );
 
       final List<DisplayWeather> forecast = weathers.list
           .skip(1)
-          .map((weather) => DisplayWeather.fromRepository(weather))
+          .map((weather) =>
+              DisplayWeather.fromRepository(weather, state.temperatureUnit))
           .toList();
 
       emit(
@@ -92,7 +95,10 @@ class WeatherCubit extends Cubit<WeatherState> {
         state.copyWith(
           dataState: DataState.success,
           location: weathers.location,
-          selectedWeather: DisplayWeather.fromRepository(weathers.list.first),
+          selectedWeather: DisplayWeather.fromRepository(
+            weathers.list.first,
+            state.temperatureUnit,
+          ),
         ),
       );
     } on Exception {

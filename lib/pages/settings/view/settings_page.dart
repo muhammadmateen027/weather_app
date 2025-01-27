@@ -16,15 +16,6 @@ class SettingsPage extends StatelessWidget {
       appBar: AppBar(title: const Text('Settings')),
       body: ListView(
         children: <Widget>[
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            color: Colors.orange[100],
-            child: Text(
-              'We are always fetching data as metric units. '
-              'This toggle will only change the displayed temperature.',
-              style: Theme.of(context).textTheme.labelLarge,
-            ),
-          ),
           BlocBuilder<WeatherCubit, WeatherState>(
             buildWhen: (previous, current) =>
                 previous.temperatureUnit != current.temperatureUnit,

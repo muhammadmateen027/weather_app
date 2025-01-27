@@ -27,16 +27,19 @@ class DisplayWeather extends Equatable {
   final WeatherCondition condition;
   final TemperatureUnit unit;
 
-  factory DisplayWeather.fromRepository(WeatherData weather) {
+  factory DisplayWeather.fromRepository(
+      WeatherData weather, TemperatureUnit unit) {
     return DisplayWeather(
       description: weather.description,
       iconCode: weather.iconCode,
-      temperature: weather.temperature,
+      temperature: unit == TemperatureUnit.celsius
+          ? weather.temperature
+          : (weather.temperature * 9 / 5) + 32,
       pressure: weather.pressure,
       humidity: weather.humidity,
       windSpeed: weather.windSpeed,
       date: weather.date,
-      unit: TemperatureUnit.celsius,
+      unit: unit,
       condition: WeatherCondition.fromString(weather.condition),
     );
   }
