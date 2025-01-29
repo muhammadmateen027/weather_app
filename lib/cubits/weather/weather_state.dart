@@ -8,6 +8,7 @@ class WeatherState extends Equatable {
     this.location,
     this.error,
     this.temperatureUnit = TemperatureUnit.celsius,
+    this.searchedCityName = '',
   });
 
   final DataState dataState;
@@ -16,6 +17,7 @@ class WeatherState extends Equatable {
   final String? error;
   final Location? location;
   final TemperatureUnit temperatureUnit;
+  final String searchedCityName;
 
   factory WeatherState.initial() {
     return WeatherState(dataState: DataState.initial);
@@ -28,6 +30,7 @@ class WeatherState extends Equatable {
     Location? location,
     String? error,
     TemperatureUnit? temperatureUnit,
+    String? searchedCityName,
   }) {
     return WeatherState(
       dataState: dataState ?? this.dataState,
@@ -36,6 +39,7 @@ class WeatherState extends Equatable {
       location: location ?? this.location,
       error: error ?? this.error,
       temperatureUnit: temperatureUnit ?? this.temperatureUnit,
+      searchedCityName: searchedCityName ?? this.searchedCityName,
     );
   }
 
@@ -47,5 +51,6 @@ class WeatherState extends Equatable {
         location,
         error,
         temperatureUnit,
+        searchedCityName,
       ];
 }

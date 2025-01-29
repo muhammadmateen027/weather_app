@@ -12,11 +12,21 @@ class WeatherCubit extends Cubit<WeatherState> {
 
   final WeatherRepository _weatherRepository;
 
+  void retryFetchWeather() {
+    fetchWeather(state.searchedCityName);
+  }
+
   Future<void> fetchWeather(String? city) async {
     if (city == null || city.isEmpty) {
       return;
     }
-    emit(state.copyWith(dataState: DataState.loading, error: null));
+    emit(
+      state.copyWith(
+        dataState: DataState.loading,
+        error: null,
+        searchedCityName: city,
+      ),
+    );
 
     try {
       final weathers = await _weatherRepository.getWeatherByCity(city);

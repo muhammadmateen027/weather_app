@@ -28,7 +28,11 @@ class WeatherPage extends StatelessWidget {
             return switch (state.dataState) {
               DataState.initial => const WeatherEmpty(),
               DataState.loading => const WeatherLoading(),
-              DataState.failure => WeatherError(errorMessage: state.error),
+              DataState.failure => WeatherError(
+                  errorMessage: state.error,
+                  onPressed: () {
+                    context.read<WeatherCubit>().retryFetchWeather();
+                  }),
               DataState.success => WeatherPopulated(
                   weather: state.selectedWeather!,
                   location: state.location!,
@@ -73,9 +77,7 @@ class _SettingIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       icon: const Icon(Icons.settings),
-      onPressed: () => Navigator.of(context).push<void>(
-        SettingsPage.route(),
-      ),
+      onPressed: () => Navigator.of(context).push<void>(SettingsPage.route()),
     );
   }
 }
