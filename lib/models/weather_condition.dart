@@ -58,39 +58,4 @@ enum WeatherCondition {
         return '🌪️';
     }
   }
-
-  String get name {
-    switch (this) {
-      case WeatherCondition.clear:
-        return 'Clear Sky';
-      case WeatherCondition.clouds:
-        return 'Cloudy';
-      case WeatherCondition.rain:
-        return 'Rainy';
-      case WeatherCondition.drizzle:
-        return 'Light Rain';
-      case WeatherCondition.thunderstorm:
-        return 'Thunderstorm';
-      case WeatherCondition.snow:
-        return 'Snowy';
-      case WeatherCondition.mist:
-        return 'Misty';
-      case WeatherCondition.smoke:
-        return 'Smoky';
-      case WeatherCondition.haze:
-        return 'Hazy';
-      case WeatherCondition.dust:
-        return 'Dusty';
-      case WeatherCondition.fog:
-        return 'Foggy';
-      case WeatherCondition.sand:
-        return 'Sandy';
-      case WeatherCondition.ash:
-        return 'Volcanic Ash';
-      case WeatherCondition.squall:
-        return 'Squall';
-      case WeatherCondition.tornado:
-        return 'Tornado';
-    }
-  }
 }

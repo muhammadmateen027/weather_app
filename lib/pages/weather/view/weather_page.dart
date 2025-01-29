@@ -28,7 +28,7 @@ class WeatherPage extends StatelessWidget {
             return switch (state.dataState) {
               DataState.initial => const WeatherEmpty(),
               DataState.loading => const WeatherLoading(),
-              DataState.failure => const WeatherError(),
+              DataState.failure => WeatherError(errorMessage: state.error),
               DataState.success => WeatherPopulated(
                   weather: state.selectedWeather!,
                   location: state.location!,
@@ -44,12 +44,24 @@ class WeatherPage extends StatelessWidget {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.search, semanticLabel: 'Search'),
-        onPressed: () {
-          Navigator.of(context).push(SearchPage.route());
-        },
+      floatingActionButton: _SearchButton(
+        onPressed: () => Navigator.of(context).push(SearchPage.route()),
       ),
+    );
+  }
+}
+
+class _SearchButton extends StatelessWidget {
+  const _SearchButton({required this.onPressed});
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      key: const Key('weatherPage_searchButton'),
+      onPressed: onPressed,
+      child: Icon(Icons.search),
     );
   }
 }

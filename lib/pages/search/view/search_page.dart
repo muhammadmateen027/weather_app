@@ -30,7 +30,7 @@ class _SearchPageState extends State<SearchPage> {
                 onSubmitted: (value) => _search(context),
                 decoration: const InputDecoration(
                   labelText: 'City',
-                  hintText: 'Chicago',
+                  hintText: 'Berlin',
                 ),
               ),
             ),

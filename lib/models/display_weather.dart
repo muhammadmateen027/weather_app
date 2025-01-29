@@ -32,7 +32,7 @@ class DisplayWeather extends Equatable {
     return DisplayWeather(
       description: weather.description,
       iconCode: weather.iconCode,
-      temperature: unit == TemperatureUnit.celsius
+      temperature: unit.isCelsius
           ? weather.temperature
           : (weather.temperature * 9 / 5) + 32,
       pressure: weather.pressure,
@@ -58,12 +58,11 @@ class DisplayWeather extends Equatable {
     );
   }
 
-  double get _displayTemperature => unit == TemperatureUnit.celsius
-      ? temperature
-      : (temperature * 9 / 5) + 32;
+  double get _displayTemperature =>
+      unit.isCelsius ? temperature : (temperature * 9 / 5) + 32;
 
   String get formattedTemperature =>
-      '${_displayTemperature.toStringAsFixed(3)}°${unit == TemperatureUnit.celsius ? 'C' : 'F'}';
+      '${_displayTemperature.toStringAsFixed(3)}°${unit.isCelsius ? 'C' : 'F'}';
 
   @override
   List<Object> get props => [

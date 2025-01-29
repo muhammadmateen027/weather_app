@@ -16,7 +16,7 @@ class WeatherCubit extends Cubit<WeatherState> {
     if (city == null || city.isEmpty) {
       return;
     }
-    emit(state.copyWith(dataState: DataState.loading));
+    emit(state.copyWith(dataState: DataState.loading, error: null));
 
     try {
       final weathers = await _weatherRepository.getWeatherByCity(city);
@@ -38,30 +38,13 @@ class WeatherCubit extends Cubit<WeatherState> {
           forecast: forecast,
         ),
       );
-    } on Exception {
-      emit(state.copyWith(dataState: DataState.failure));
+    } on LocationNotFoundException {
+      _emitErrorState('City not found');
+    } on WeatherNotFoundException {
+      _emitErrorState('Weather not found');
+    } on WeatherRequestFailureException {
+      _emitErrorState('Failed to fetch weather');
     }
-  }
-
-  List<DisplayWeather> _reorderWeathers(DisplayWeather newSelection) {
-    final previousSelection = state.selectedWeather;
-    final List<DisplayWeather> orderedList = [...state.forecast];
-
-    // First, if there was a previous selection, insert it back in chronological order
-    if (previousSelection != null) {
-      int insertIndex = orderedList.indexWhere(
-          (weather) => weather.date.isAfter(previousSelection.date));
-      if (insertIndex == -1) {
-        orderedList.add(previousSelection);
-      } else {
-        orderedList.insert(insertIndex, previousSelection);
-      }
-    }
-
-    // Then remove the newly selected weather from the list
-    orderedList.removeWhere((weather) => weather == newSelection);
-
-    return orderedList;
   }
 
   void selectWeather(DisplayWeather newSelection) {
@@ -72,11 +55,8 @@ class WeatherCubit extends Cubit<WeatherState> {
     if (state.location == null) {
       return;
     }
-    await _refreshCityWeather();
-  }
 
-  Future<void> _refreshCityWeather() async {
-    emit(state.copyWith(dataState: DataState.loading));
+    emit(state.copyWith(dataState: DataState.loading, error: null));
 
     try {
       final weathers = await _weatherRepository.getWeatherByCoord(
@@ -94,13 +74,19 @@ class WeatherCubit extends Cubit<WeatherState> {
           ),
         ),
       );
-    } on Exception {
-      emit(state.copyWith(dataState: DataState.failure));
+    } on WeatherNotFoundException {
+      _emitErrorState('Weather not found');
+    } on WeatherRequestFailureException {
+      _emitErrorState('Failed to refresh weather');
     }
   }
 
+  void _emitErrorState(String error) {
+    emit(state.copyWith(dataState: DataState.failure, error: error));
+  }
+
   void toggleTemperatureUnit() {
-    final newUnit = state.temperatureUnit == TemperatureUnit.celsius
+    final newUnit = state.temperatureUnit.isCelsius
         ? TemperatureUnit.fahrenheit
         : TemperatureUnit.celsius;
 
