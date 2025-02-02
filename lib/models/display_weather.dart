@@ -17,16 +17,6 @@ class DisplayWeather extends Equatable {
     this.unit = TemperatureUnit.celsius,
   });
 
-  final String description;
-  final String iconCode;
-  final double temperature;
-  final int pressure;
-  final int humidity;
-  final double windSpeed;
-  final DateTime date;
-  final WeatherCondition condition;
-  final TemperatureUnit unit;
-
   factory DisplayWeather.fromRepository(
       WeatherData weather, TemperatureUnit unit) {
     return DisplayWeather(
@@ -43,6 +33,16 @@ class DisplayWeather extends Equatable {
       condition: WeatherCondition.fromString(weather.condition),
     );
   }
+
+  final String description;
+  final String iconCode;
+  final double temperature;
+  final int pressure;
+  final int humidity;
+  final double windSpeed;
+  final DateTime date;
+  final WeatherCondition condition;
+  final TemperatureUnit unit;
 
   DisplayWeather copyWith({TemperatureUnit? unit}) {
     return DisplayWeather(

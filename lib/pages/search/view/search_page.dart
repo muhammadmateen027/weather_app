@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/cubits/cubits.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage._();
+  const SearchPage({super.key});
 
   static Route<String> route() {
-    return MaterialPageRoute(builder: (_) => const SearchPage._());
+    return MaterialPageRoute(builder: (_) => const SearchPage());
   }
 
   @override

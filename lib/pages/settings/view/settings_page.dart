@@ -4,10 +4,10 @@ import 'package:weather_app/cubits/cubits.dart';
 import 'package:weather_app/models/display_weather.dart';
 
 class SettingsPage extends StatelessWidget {
-  const SettingsPage._();
+  const SettingsPage({super.key});
 
   static Route<void> route() {
-    return MaterialPageRoute<void>(builder: (_) => const SettingsPage._());
+    return MaterialPageRoute<void>(builder: (_) => const SettingsPage());
   }
 
   @override
