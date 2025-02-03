@@ -6,7 +6,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:weather_app/cubits/weather/weather_cubit.dart';
 import 'package:weather_app/pages/settings/view/settings_page.dart';
 
-import '../../test_bed.dart';
+import '../../widget_test_bed.dart';
 
 class MockWeatherCubit extends Mock implements WeatherCubit {
   @override
