@@ -11,8 +11,10 @@ class WeatherRepository {
   /// Creates a new instance of [WeatherRepository].
   ///
   /// The [apiKey] is required to authenticate with the OpenWeather API.
-  WeatherRepository({required String apiKey})
-      : _weatherApiClient = api.OpenWeatherApiClient(apiKey);
+  WeatherRepository({
+    required String apiKey,
+    api.OpenWeatherApiClient? apiClient,
+  }) : _weatherApiClient = apiClient ?? api.OpenWeatherApiClient(apiKey);
 
   final api.OpenWeatherApiClient _weatherApiClient;
 

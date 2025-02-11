@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:open_weather_api/open_weather_api.dart';
-import 'package:open_weather_api/src/models/forecast_dto.dart';
 import 'package:test/test.dart';
 
 class MockDio extends Mock implements Dio {
