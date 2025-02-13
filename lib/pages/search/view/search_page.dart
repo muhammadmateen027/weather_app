@@ -5,10 +5,6 @@ import 'package:weather_app/cubits/cubits.dart';
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
 
-  static Route<String> route() {
-    return MaterialPageRoute(builder: (_) => const SearchPage());
-  }
-
   @override
   State<SearchPage> createState() => _SearchPageState();
 }
