@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weather_app/app/routes/routes.dart';
 import 'package:weather_app/cubits/cubits.dart';
 import 'package:weather_app/utils/utils.dart';
 
-import '../../pages.dart';
 import '../components/components.dart';
 
 class WeatherPage extends StatelessWidget {
@@ -48,9 +48,7 @@ class WeatherPage extends StatelessWidget {
           },
         ),
       ),
-      floatingActionButton: _SearchButton(
-        onPressed: () => Navigator.of(context).push(SearchPage.route()),
-      ),
+      floatingActionButton: _SearchButton(onPressed: context.navigateToSearch),
     );
   }
 }
@@ -63,7 +61,6 @@ class _SearchButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      key: const Key('weatherPage_searchButton'),
       onPressed: onPressed,
       child: Icon(Icons.search),
     );
@@ -77,7 +74,7 @@ class _SettingIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       icon: const Icon(Icons.settings),
-      onPressed: () => Navigator.of(context).push<void>(SettingsPage.route()),
+      onPressed: context.navigateToSettings,
     );
   }
 }

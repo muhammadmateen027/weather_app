@@ -4,7 +4,7 @@ import 'package:weather_app/cubits/cubits.dart';
 import 'package:weather_app/models/models.dart';
 import 'package:weather_repository/weather_repository.dart';
 
-import '../pages/pages.dart';
+import 'routes/app_router.dart';
 
 class WeatherApp extends StatelessWidget {
   const WeatherApp({required WeatherRepository weatherRepository, super.key})
@@ -37,7 +37,8 @@ class WeatherAppView extends StatelessWidget {
         ),
         colorScheme: ColorScheme.fromSeed(seedColor: seedColor ?? Colors.blue),
       ),
-      home: const WeatherPage(),
+      initialRoute: AppRouter.initial,
+      onGenerateRoute: AppRouter.onGenerateRoute,
     );
   }
 }

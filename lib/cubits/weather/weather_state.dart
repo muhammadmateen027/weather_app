@@ -11,6 +11,10 @@ class WeatherState extends Equatable {
     this.searchedCityName = '',
   });
 
+  factory WeatherState.initial() {
+    return WeatherState(dataState: DataState.initial);
+  }
+
   final DataState dataState;
   final DisplayWeather? selectedWeather;
   final List<DisplayWeather> forecast;
@@ -18,10 +22,6 @@ class WeatherState extends Equatable {
   final Location? location;
   final TemperatureUnit temperatureUnit;
   final String searchedCityName;
-
-  factory WeatherState.initial() {
-    return WeatherState(dataState: DataState.initial);
-  }
 
   WeatherState copyWith({
     DataState? dataState,

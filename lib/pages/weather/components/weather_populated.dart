@@ -157,16 +157,16 @@ class _WeatherStatusAndLocation extends StatelessWidget {
 }
 
 class WeatherMetrics extends StatelessWidget {
-  final int humidity;
-  final int pressure;
-  final double windSpeed;
-
   const WeatherMetrics({
     super.key,
     required this.humidity,
     required this.pressure,
     required this.windSpeed,
   });
+
+  final int humidity;
+  final int pressure;
+  final double windSpeed;
 
   @override
   Widget build(BuildContext context) {
@@ -197,15 +197,15 @@ class WeatherMetrics extends StatelessWidget {
 }
 
 class _MetricItem extends StatelessWidget {
-  final IconData icon;
-  final String value;
-  final String label;
-
   const _MetricItem({
     required this.icon,
     required this.value,
     required this.label,
   });
+
+  final IconData icon;
+  final String value;
+  final String label;
 
   @override
   Widget build(BuildContext context) {
