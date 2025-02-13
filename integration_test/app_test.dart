@@ -9,7 +9,7 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   final repository = WeatherRepository(
-    apiKey: const String.fromEnvironment('WEATHER_API_KEY'),
+    apiKey: const String.fromEnvironment('OPEN_WEATHER_API_KEY'),
   );
 
   group('Search Page Integration Tests', () {
